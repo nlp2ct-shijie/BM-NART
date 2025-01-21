@@ -21,8 +21,7 @@ cd path/to/BM-NART-main/imputer-pytorch
 pip install .
 ```
 ## Data Processing
-We provide the BiKD dataset of WMT14 En-De/De-En, WMT16-En-Ro/Ro/En we use in our experiment. Please refer the the following link for BiKD dataset downloading:
-[Link to data](Link to data).
+We provide the BiKD dataset of IWSLT14 DE-EN, WMT14 En-De/De-En, WMT16-En-Ro/Ro/En we use in our experiment. Please refer the the following [link](https://drive.google.com/drive/folders/1TX9Pi-m-h_JjC5p7kfy6IcD33B3nIHZ-?usp=drive_link) for BiKD dataset downloading.
 
 Then, to generate the binarized data used for the later training, you can run the following script. (We also provide the shell file in BM-NART-main/run/Preprocess.sh)
 ```shell
