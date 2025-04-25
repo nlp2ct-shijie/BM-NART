@@ -10,6 +10,7 @@ We propose a Bidirectional Multitask Non-Autoregressive  Transformer (BM-NART) m
 - BM-NART further enhances the NART models (GLAT/GLAT+CTC) without introducing additional inference costs.
 - BM-NART achieves translation performance comparable to or even surpassing that of ART models across all language pairs.
 - With equivalent model scales, BM-NART achieves significant inference speedup (13.7× – 19.2×) compared to ART models.
+
 ![Speedup ratio and translation quality](https://i.postimg.cc/d3QmBRRt/scatter-plot-y-BLEU-20250425.png)
 ## Requirement & Installation
 - Python >= 3.7
