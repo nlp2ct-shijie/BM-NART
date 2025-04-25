@@ -1,11 +1,16 @@
-﻿# BM-NART
-## Overview
-### Model Introduciton
+# BM-NART
+Implementation for the paper "**Bidirectional Multitask Learning for Non-Autoregressive Machine Translation**".
+## Background
+#### Abstract
+Non-Autoregressive Transformer~(NART) models generate tokens independently, resulting in lower translation quality than the Autoregressive Transformer (ART) model. To enhance the generation quality, prior Multitask Learning (MTL) frameworks have incorporated a directional Autoregressive (AR) prediction task in conjunction with the Non-Autoregressive (NAR) task. This work proposes further enhancing the NART model with Bidirectional Autoregressive (Bi-AR) prediction tasks. We propose the Bidirectional Multitask Non-Autoregressive Transformer (BM-NART) framework, which enhances the NART decoder model with a weak twin-decoder block, providing AR prediction supervision signal in both directions. To accommodate the bidirectional decoder, we further enhance the Autoregressive Knowledge Distillation (ARKD) with the introduction of Bidirectional Knowledge Distillation (BiKD), which employs dual directional teacher models to provide Bi-AR knowledge distillation data. The experiment confirms that with BiKD, the BM-NART framework achieves generation quality comparable to ART models in BLEU and BERTScore while retaining the advantage of high parallel generation, achieving a 13.7-20 times acceleration with various parameter scalings. Our LLM-based analysis further reveals that the BM-NART framework surpasses the ART model in handling ambiguous translations, knowledge-dependent translations, and reducing hallucinations, illustrating the substantial potential of future NART models.
+#### Model Introduciton
 We propose a Bidirectional Multitask Non-Autoregressive  Transformer (BM-NART) model, which  enhances the NART decoder model with  a weak twin-decoder block, providing AR prediction supervision signal in both directions.
 ![overall_model_arch](https://ooo.0x0.ooo/2024/10/31/ODwf0S.png)
-### The Main Result
-Our proposed fully BM-NART model overperforms the ART models on four lanuage pairs, WMT14 En-De, WMT16 En-Ro, Ro-En, and IWSLT14 De-En. Meanwhile, it also shows comparable translation quality on WMT14 De-En. In short, we gain comparable translation quality with the ART models with the same scale and significant inference speedup (13.7× - 19.2×) compared with the previous NART models.
-![Speedup ratio and translation quality](https://ooo.0x0.ooo/2024/10/31/OHMo7v.jpg)
+#### Practical Advantages
+- BM-NART further enhances the NART models (GLAT/GLAT+CTC) without introducing additional inference costs.
+- BM-NART achieves translation performance comparable to or even surpassing that of ART models across all language pairs.
+- With equivalent model scales, BM-NART achieves significant inference speedup (13.7× – 19.2×) compared to ART models.
+![Speedup ratio and translation quality](https://i.postimg.cc/d3QmBRRt/scatter-plot-y-BLEU-20250425.png)
 ## Requirement & Installation
 - Python >= 3.7
 - Pytorch >= 1.10.1
@@ -13,7 +18,7 @@ Our proposed fully BM-NART model overperforms the ART models on four lanuage pai
 cd path/to/BM-NART-main
 pip install -e .
 ```
-In our implement, we need to use the ctcdecode to support the CTC beam search and the torch_imputer to gain the best alignment. You can follow the below instruction to instsall them.
+In our implementation, we use the ctcdecode to support the CTC beam search and the torch_imputer to gain the best alignment. Follow the below instruction to instsall both packages:
 ```shell
 cd path/to/BM-NART-main/ctcdecode
 pip install .
@@ -21,12 +26,12 @@ cd path/to/BM-NART-main/imputer-pytorch
 pip install .
 ```
 ## Data Processing
-We provide the BiKD dataset of IWSLT14 DE-EN, WMT14 En-De/De-En, WMT16-En-Ro/Ro/En we use in our experiment. Please refer the the following [link](https://drive.google.com/drive/folders/1TX9Pi-m-h_JjC5p7kfy6IcD33B3nIHZ-?usp=drive_link) for BiKD dataset downloading.
-
-Then, to generate the binarized data used for the later training, you can run the following script. (We also provide the shell file in BM-NART-main/run/Preprocess.sh)
+- We release the BiKD dataset of IWSLT14 DE-EN, WMT14 En-De/De-En, WMT16-En-Ro/Ro/En. 
+- Refer to the following link for BiKD data downloading:  [https://drive.google.com/drive/folders/1TX9Pi-m-h_JjC5p7kfy6IcD33B3nIHZ-?usp=drive_link](https://drive.google.com/drive/folders/1TX9Pi-m-h_JjC5p7kfy6IcD33B3nIHZ-?usp=drive_link)
+- To generate the binarized data, please run the shell file `path/to/BM-NART/main/run/Preprocess.py`
 ```shell
-input_dir=path/to/raw_data         # directory of raw text data
-data_dir=path/to/binarized_data    # directory of the generated binarized data
+input_dir=path/to/raw_data      # directory of raw text data
+data_dir=path/to/binarized_data   # directory of the generated binarized data
 src=src                            # source language id
 tgt=tgt                            # target language id
 fairseq-preprocess --source-lang ${src} --target-lang ${tgt} \
@@ -35,8 +40,11 @@ fairseq-preprocess --source-lang ${src} --target-lang ${tgt} \
     --srcdict ${input_dir}/dict.${src}.txt --tgtdict {input_dir}/dict.${tgt}.txt \
     --destdir ${data_dir} --workers 4
 ```
+
 ## Training and Evaluating
-We have integrated the complete process of train, average checkpoint, and inference into `path/to/BM-NART/main/run/train-auto.py`. You can directly run the program, then it will automatically start training with the default bidirectional configuration, average the best 5 checkpoints and finally inference the best average checkpoint. You can run the following script to start training. (We also provide the shell file in BM-NART-main/run/train-auto-py.sh)
+-  We have integrated the complete process of train, average checkpoint, and inference into `path/to/BM-NART/main/run/train-auto.py`. Run the script `BM-NART-main/run/train-auto-py.sh` to start training.
+-  The commonly used parameters can be set here. If you want to change more detailed parameters, such as dropout rate, bidirectional sharing settings, etc., refer to `get_train_order` function in `train-auto.py`.
+- After finishing the training, a file named `gen.best5.out` which records the inference result will be generated.
 ```shell
 savedir=path/to/checkpoints
 dataset=path/to/binarized_data
@@ -53,7 +61,7 @@ output_file="train.log"  # the file to save the training log
 lr=0.0005
 warmup_updates=10000
 warmup_init_lr=1e-07
-check_freq=5
+check_freq=5 # check frequency of validation bleu
 
 python train-auto.py --savedir ${savedir} --dataset ${dataset} --userdir ${userdir} --task ${task} --criterion ${criterion} --arch ${arch} \
 		   --max-token ${max_token} --max-epochs {max_epoch} --update-freq ${update_freq} \
@@ -62,8 +70,7 @@ python train-auto.py --savedir ${savedir} --dataset ${dataset} --userdir ${userd
 		   --at-weights 0.8 0.7 0.6 0.5 0.4 --check-freq ${check_freq} \
 		   --with-curr --saving-type 'epoch'
 ```
-We set commonly used parameters here. If you want to set more detailed parameters, such as dropout rate, bidirectional sharing settings, etc., you can go to `get_train_order` function in `train-auto.py` to set them.
-After finishing the training, you will see a file named `gen.best5.out` which records the inference result.
+
 ## Model Directory Structure
 ```
 BM-NART
@@ -81,3 +88,5 @@ BM-NART
     ├── TransformerBackwardDecoder.py        # The implementation of backward transformer decoder
     ├── TransformerBackwardDecoderLayer.py   # The implementation of backward transformer decoder layer
 ```
+## Citing
+Please kindly cite us if you find our papers or codes useful.
