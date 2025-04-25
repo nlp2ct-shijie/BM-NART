@@ -1,5 +1,5 @@
 # BM-NART
-Implementation for the paper "**Bidirectional Multitask Learning for Non-Autoregressive Machine Translation**".
+Implementation of the paper "**Bidirectional Multitask Learning for Non-Autoregressive Machine Translation**".
 ## Background
 #### Abstract
 Non-Autoregressive Transformer (NART) models generate tokens independently, resulting in lower translation quality than the Autoregressive Transformer (ART) model. To enhance the generation quality, prior Multitask Learning (MTL) frameworks have incorporated a directional Autoregressive (AR) prediction task in conjunction with the Non-Autoregressive (NAR) task. This work proposes further enhancing the NART model with Bidirectional Autoregressive (Bi-AR) prediction tasks. We propose the Bidirectional Multitask Non-Autoregressive Transformer (BM-NART) framework, which enhances the NART decoder model with a weak twin-decoder block, providing AR prediction supervision signal in both directions. To accommodate the bidirectional decoder, we further enhance the Autoregressive Knowledge Distillation (ARKD) with the introduction of Bidirectional Knowledge Distillation (BiKD), which employs dual directional teacher models to provide Bi-AR knowledge distillation data. The experiment confirms that with BiKD, the BM-NART framework achieves generation quality comparable to ART models in BLEU and BERTScore while retaining the advantage of high parallel generation, achieving a 13.7-20 times acceleration with various parameter scalings. Our LLM-based analysis further reveals that the BM-NART framework surpasses the ART model in handling ambiguous translations, knowledge-dependent translations, and reducing hallucinations, illustrating the substantial potential of future NART models.
@@ -11,7 +11,7 @@ We propose a Bidirectional Multitask Non-Autoregressive  Transformer (BM-NART) m
 - BM-NART achieves translation performance comparable to or even surpassing that of ART models across all language pairs.
 - With equivalent model scales, BM-NART achieves significant inference speedup (13.7× – 19.2×) compared to ART models.
 
-![Speedup ratio and translation quality](https://github.com/nlp2ct-shijie/BM-NART/blob/main/Assets/Result_of_BM_NART.png)
+![Speedup ratio and translation quality](https://github.com/nlp2ct-shijie/BM-NART/blob/main/Assets/Result_of_BM_NART.png#pic_center)
 ## Requirement & Installation
 - Python >= 3.7
 - Pytorch >= 1.10.1
