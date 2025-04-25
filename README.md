@@ -12,8 +12,10 @@ We propose a Bidirectional Multitask Non-Autoregressive  Transformer (BM-NART) m
 - With equivalent model scales, BM-NART achieves significant inference speedup (13.7× – 19.2×) compared to ART models.
 
 <center>
-![Speedup ratio and translation quality](https://github.com/nlp2ct-shijie/BM-NART/blob/main/Assets/Result_of_BM_NART.png#pic_center)
+![Speedup ratio and translation quality](https://github.com/nlp2ct-shijie/BM-NART/blob/main/Assets/Result_of_BM_NART.png)
 </center>
+
+
 ## Requirement & Installation
 - Python >= 3.7
 - Pytorch >= 1.10.1
