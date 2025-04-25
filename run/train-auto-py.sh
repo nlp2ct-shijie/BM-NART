@@ -15,7 +15,7 @@ output_file="train.log"  # the file to save the training log
 lr=0.0005
 warmup_updates=10000
 warmup_init_lr=1e-07
-check_freq=5
+check_freq=5  # check frequency of validation bleu
 
 python train-auto.py --savedir ${savedir} --dataset ${dataset} --userdir ${userdir} --task ${task} --criterion ${criterion} --arch ${arch} \
 		   --max-token ${max_token} --max-epochs {max_epoch} --update-freq ${update_freq} \
